@@ -17,41 +17,38 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.doneButton.setOnClickListener {
-            addNickname(it)
-        }
-        findViewById<TextView>(R.id.nickname_text).setOnClickListener{
-            updateNickname(it)
+        binding.apply {
+            doneButton.setOnClickListener {
+                addNickname(it)
+            }
+            nicknameText.setOnClickListener{
+                updateNickname(it)
+            }
         }
     }
 
     private fun updateNickname(view: View) {
-        val editText = binding.nicknameEdit
-        val nicknameTextView = binding.nicknameText
-        editText.visibility = View.VISIBLE
-        nicknameTextView.visibility = View.GONE
+        binding.apply {
+            nicknameEdit.visibility = View.VISIBLE
+            nicknameText.visibility = View.GONE
+            doneButton.visibility = View.VISIBLE
 
-        val doneButton = binding.doneButton
-        done_button.visibility = View.VISIBLE
+            nicknameEdit.requestFocus() //เอา Cursor ไปไว้ที่ editText อัตโนมัติ
 
-        editText.requestFocus() //เอา Cursor ไปไว้ที่ editText อัตโนมัติ
-
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(editText, 0)
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(nicknameEdit, 0)
+        }
     }
 
     private fun addNickname(view: View) {
-        val editText = binding.nicknameEdit
-        val nicknameTextView = binding.nicknameText
-        nicknameTextView.text = editText.text
-        editText.visibility = View.GONE
-        nicknameTextView.visibility = View.VISIBLE
-
-        val doneButton = binding.doneButton
-        done_button.visibility = View.GONE
-        //Hide the keyboard
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-
+        binding.apply {
+            nicknameText.text = binding.nicknameEdit.text
+            nicknameEdit.visibility = View.GONE
+            nicknameText.visibility = View.VISIBLE
+            doneButton.visibility = View.GONE
+            //Hide the keyboard
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 }
